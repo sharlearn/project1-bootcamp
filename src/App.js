@@ -1,20 +1,23 @@
 import React from "react";
-import logo from "./logo.png";
 import "./App.css";
+import { RecipeCard } from "./components/RecipeCard";
+import { useState } from "react";
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-        </header>
+const App = () => {
+  const [ingredients, setIngredients] = useState([
+    { ingredient: "lemon", quantity: 1, unit: "piece", id: 1 },
+    { ingredient: "honey", quantity: 1, unit: "tsp", id: 2 },
+    { ingredient: "water", quantity: 300, unit: "ml", id: 3 },
+  ]);
+
+  return (
+    <div className="App">
+      <h1>Today Cook What</h1>
+      <div className="content">
+        <RecipeCard />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;
