@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>Today Cook What</h1>
+      <h1 className="App-Heading">Cook What</h1>
       <div className="content">
         <RecipeCard />
       </div>

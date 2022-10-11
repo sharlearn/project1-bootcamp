@@ -1,15 +1,15 @@
 const IngredientList = ({ ingredients, handleDelete }) => {
   return (
     <div>
-      {ingredients.map((ingredients) => (
-        <ul>
+      <ol>
+        {ingredients.map((ingredients) => (
           <li key={ingredients.id}>
             {ingredients.ingredient} {ingredients.quantity}
             {ingredients.unit}
             <button onClick={() => handleDelete(ingredients.id)}>X</button>
           </li>
-        </ul>
-      ))}
+        ))}
+      </ol>
     </div>
   );
 };
