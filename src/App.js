@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import { RecipeCard } from "./components/RecipeCard";
-import { useState } from "react";
+import CreateRecipe from "./components/CreateRecipe";
 import { RecipeList } from "./components/RecipeList";
 
 const App = () => {
   const [allRecipes, setAllRecipes] = useState("");
+  const [createRecipe, setCreateRecipe] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:8000/recipes")
@@ -14,15 +14,18 @@ const App = () => {
       })
       .then((data) => {
         setAllRecipes(data);
-        console.log(allRecipes);
       });
   }, []);
 
   return (
-    <div className="App">
-      <h1 className="App-Heading">Cook What</h1>
+    <div className="app">
+      <h1 className="app-heading">Eat Your Eggs</h1>
+      {!createRecipe && (
+        <button onClick={() => setCreateRecipe(true)}>Add Recipe</button>
+      )}
+      <div>{createRecipe && <CreateRecipe />}</div>
       <div className="content">
-        {allRecipes && <RecipeList allRecipes={allRecipes} />}
+        {!createRecipe && allRecipes && <RecipeList allRecipes={allRecipes} />}
       </div>
     </div>
   );

@@ -6,7 +6,6 @@ const InstructionsList = ({ instructions }) => {
           <li key={index}>{steps}</li>
         ))}
       </ul>
-      {console.log("hello")}
     </div>
   );
 };
