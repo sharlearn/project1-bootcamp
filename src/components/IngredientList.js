@@ -1,22 +1,31 @@
 import { Converter } from "./Converter";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
-const IngredientList = ({ ingredients, handleDelete }) => {
+const IngredientList = ({ ingredients, handleDelete, hideConverter }) => {
   return (
-    <div>
-      {console.log(ingredients[0]["unit"])}
-      <ol>
-        {ingredients.map((ingredients) => (
-          <li key={ingredients.id}>
-            {ingredients.name} {ingredients.qty}
-            {ingredients.unit}
-            {handleDelete && (
-              <button onClick={() => handleDelete(ingredients.id)}>X</button>
-            )}
-            <Converter qty={ingredients.qty} unit={ingredients.unit} />
-          </li>
-        ))}
-      </ol>
-    </div>
+    <Container>
+      {ingredients.map((ingredients) => (
+        <>
+          <Row>
+            <Col>{ingredients.name}</Col>
+            <Col>{ingredients.qty}</Col>
+            <Col>{ingredients.unit}</Col>
+            <Col>
+              {handleDelete && (
+                <button onClick={() => handleDelete(ingredients.id)}>X</button>
+              )}
+            </Col>
+            <Col>
+              {!hideConverter && (
+                <Converter qty={ingredients.qty} unit={ingredients.unit} />
+              )}
+            </Col>
+          </Row>
+        </>
+      ))}
+    </Container>
   );
 };
 

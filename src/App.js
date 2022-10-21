@@ -2,30 +2,45 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import CreateRecipe from "./components/CreateRecipe";
 import { RecipeList } from "./components/RecipeList";
+import "bootstrap/dist/css/bootstrap.min.css";
+import NavigationBar from "./components/Navbar";
 
 const App = () => {
-  const [allRecipes, setAllRecipes] = useState("");
+  const [allRecipes, setAllRecipes] = useState([]);
   const [createRecipe, setCreateRecipe] = useState(false);
 
+  const setPage = () => {
+    createRecipe ? setCreateRecipe(false) : setCreateRecipe(true);
+  };
+  const setRecipes = (recipe) => setAllRecipes(recipe);
+
   useEffect(() => {
-    fetch("http://localhost:8000/recipes")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setAllRecipes(data);
-      });
+    const recipes = JSON.parse(localStorage.getItem("recipes"));
+    if (recipes) {
+      setAllRecipes(recipes);
+    }
   }, []);
+
+  const setRecipeList = (recipeList) => setAllRecipes(recipeList);
 
   return (
     <div className="app">
-      <h1 className="app-heading">Eat Your Eggs</h1>
-      {!createRecipe && (
-        <button onClick={() => setCreateRecipe(true)}>Add Recipe</button>
-      )}
-      <div>{createRecipe && <CreateRecipe />}</div>
+      {console.log(allRecipes)}
+      <NavigationBar setPage={setCreateRecipe} />
+      <div>
+        {createRecipe && (
+          <CreateRecipe
+            show={createRecipe}
+            setPage={setPage}
+            setRecipes={setRecipes}
+            allRecipes={allRecipes}
+          />
+        )}
+      </div>
       <div className="content">
-        {!createRecipe && allRecipes && <RecipeList allRecipes={allRecipes} />}
+        {!createRecipe && allRecipes && (
+          <RecipeList allRecipes={allRecipes} setRecipeList={setRecipeList} />
+        )}
       </div>
     </div>
   );
