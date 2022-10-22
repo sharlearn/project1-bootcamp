@@ -25,8 +25,7 @@ const App = () => {
 
   return (
     <div className="app">
-      {console.log(allRecipes)}
-      <NavigationBar setPage={setCreateRecipe} />
+      <NavigationBar setPage={setCreateRecipe} allRecipes={allRecipes} />
       <div>
         {createRecipe && (
           <CreateRecipe

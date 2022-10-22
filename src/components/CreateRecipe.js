@@ -2,15 +2,21 @@ import React, { useState } from "react";
 import { v1 as uuid } from "uuid";
 import IngredientList from "./IngredientList";
 import InstructionsList from "./InstructionsList";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import InputGroup from "react-bootstrap/InputGroup";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
-const CreateRecipe = ({ setPage, setRecipes, allRecipes }) => {
+const CreateRecipe = ({ setPage, setRecipes, allRecipes, show }) => {
   const [name, setName] = useState("");
   const [recipeName, setRecipeName] = useState("");
 
   const [ingredient, setIngredient] = useState({
     name: "",
     qty: 0,
-    unit: "piece(s)",
+    unit: "",
   });
   const [ingredientsList, setIngredientsList] = useState([]);
 
@@ -66,71 +72,133 @@ const CreateRecipe = ({ setPage, setRecipes, allRecipes }) => {
       id: uuid(),
     };
     const allCurrRecipes = [...allRecipes, newRecipe];
-    console.log(allCurrRecipes);
     localStorage.setItem("recipes", JSON.stringify(allCurrRecipes));
+
     setRecipes(allCurrRecipes);
     setPage(false);
   };
 
   return (
-    <div className="create-recipe">
-      {console.log(allRecipes)}
-      <h3>Create New Recipe</h3>
-      <div>
-        <h4>Recipe Name: {recipeName}</h4>
-        <form onSubmit={handleRecipeNameSubmit}>
-          <input type="text" value={name} onChange={handleRecipeNameChange} />
-          <input type="submit" value="enter" />
-        </form>
-      </div>
-      <div>
-        <h4>Ingredients:</h4>
-        <IngredientList
-          ingredients={ingredientsList}
-          handleDelete={removeIngredient}
-        />
-        <form onSubmit={ingredientsListUpdate}>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={ingredient.name}
-            onChange={ingredientChange}
-          />
+    <Modal
+      className="modal-create"
+      show={show}
+      onHide={setPage}
+      size="lg"
+      dialogClassName="modal-90w"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Create New Recipe</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleRecipeNameSubmit}>
+          <Form.Label>Recipe Name</Form.Label>
+          <InputGroup>
+            <Form.Control
+              type="text"
+              placeholder="recipe name"
+              value={name}
+              onChange={handleRecipeNameChange}
+            />
+            <Button
+              variant="outline-secondary"
+              id="button-addon2"
+              type="submit"
+            >
+              Enter
+            </Button>
+          </InputGroup>
+        </Form>
 
-          <label>Quantity:</label>
-          <input
-            type="text"
-            name="qty"
-            value={ingredient.qty}
-            onChange={ingredientChange}
-          />
+        <Form onSubmit={ingredientsListUpdate}>
+          <Row>
+            <Form.Group as={Col}>
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                className="input-ingredient"
+                value={ingredient.name}
+                onChange={ingredientChange}
+                required
+              />
+            </Form.Group>
 
-          <label>Unit:</label>
-          <select name={ingredient.unit} onChange={ingredientChange}>
-            <option value="piece(s)">Piece(s)</option>
-            <option value="ml">Mililtres</option>
-            <option value="l">Litres</option>
-            <option value="kg">Kilograms</option>
-            <option value="g">Grams</option>
-          </select>
-          <button type="submit">+</button>
-        </form>
-      </div>
-      <div>
-        <h4>Instructions:</h4>
-        <InstructionsList instructions={instructionsList} />
-        <form onSubmit={instructionsListUpdate} value={instruction}>
-          <input
-            value={instruction}
-            className="insert-instructions"
+            <Form.Group as={Col}>
+              <Form.Label>Quantity</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="text"
+                  name="qty"
+                  value={ingredient.qty}
+                  onChange={ingredientChange}
+                  required
+                />
+              </InputGroup>
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Form.Label>Unit</Form.Label>
+              <Form.Select
+                variant="outline-secondary"
+                name="unit"
+                value={ingredient.unit}
+                onChange={ingredientChange}
+              >
+                <option value=""> </option>
+                <option value="tsp">teaspoon</option>
+                <option value="tbs">tablespoon</option>
+                <option value="cup(s)">cup</option>
+                <option value="fl">fluid ounce</option>
+                <option value="ml">mililitres</option>
+                <option value="l">litres</option>
+                <option value="kg">kilograms</option>
+                <option value="g">grams</option>
+                <option value="oz">ounce</option>
+              </Form.Select>
+            </Form.Group>
+          </Row>
+          <Button variant="outline-secondary" size="sm" type="submit">
+            +
+          </Button>
+        </Form>
+
+        <Form onSubmit={instructionsListUpdate} value={instruction}>
+          <Form.Label>Instructions</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={2}
             onChange={instructionChange}
+            value={instruction}
+            required
+          ></Form.Control>
+          <Button variant="outline-secondary" size="sm" type="submit">
+            +
+          </Button>
+        </Form>
+        <Button
+          className="save-recipe"
+          variant="outline-secondary"
+          onClick={handleSubmit}
+        >
+          Save Recipe
+        </Button>
+
+        <div className="recipe-preview">
+          <h4>Recipe Preview</h4>
+          <div>
+            <h5>{recipeName}</h5>
+          </div>
+          <h5>Ingredients:</h5>
+          <IngredientList
+            ingredients={ingredientsList}
+            handleDelete={removeIngredient}
+            hideConverter="true"
           />
-          <button type="submit">Add</button>
-        </form>
-      </div>
-      <button onClick={handleSubmit}>Save Recipe</button>
-    </div>
+          <h5>Instructions:</h5>
+          <InstructionsList instructions={instructionsList} />
+        </div>
+      </Modal.Body>
+    </Modal>
   );
 };
 

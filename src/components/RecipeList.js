@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Accordion, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import IngredientList from "./IngredientList";
 import InstructionsList from "./InstructionsList";
 import CloseButton from "react-bootstrap/CloseButton";
@@ -16,12 +16,15 @@ const RecipeList = ({ allRecipes, setRecipeList }) => {
 
   return (
     <div>
-      {console.log(allRecipes)}
       {allRecipes.map((recipe) => (
-        <Card style={{ width: "85vw" }}>
-          <Card.Body>
-            <Card.Title>{recipe["title"]}</Card.Title>
-            <CloseButton onClick={() => deleteRecipe(recipe["id"])} />
+        <Card>
+          <Card.Body className="recipe-card">
+            <CloseButton
+              className="delete-recipe"
+              onClick={() => deleteRecipe(recipe["id"])}
+            />
+            <Card.Title name={recipe["id"]}>{recipe["title"]}</Card.Title>
+
             <Card.Subtitle className="mb-2 text-muted">
               Ingredients:
             </Card.Subtitle>

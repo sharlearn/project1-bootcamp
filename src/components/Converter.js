@@ -9,13 +9,13 @@ export const Converter = ({ qty, unit }) => {
   const ml = "ml";
   const l = "l";
   const oz = "oz";
+  const fl = "fl";
 
   const [convertedQty, setConvertedQty] = useState(currQty);
   const [convertedUnit, setConvertedUnit] = useState(currUnit);
 
   const handleChange = (event) => {
     const selectedUnit = event.target.value;
-
     setConvertedUnit(selectedUnit);
 
     if (currUnit === g) {
@@ -45,6 +45,8 @@ export const Converter = ({ qty, unit }) => {
         return setConvertedQty(OztoG(currQty));
       } else if (selectedUnit === kg) {
         return setConvertedQty(OztoKG(currQty));
+      } else if (selectedUnit === ml) {
+        return setConvertedQty(OztoML(currQty));
       } else {
         return setConvertedQty(currQty);
       }
@@ -78,29 +80,45 @@ export const Converter = ({ qty, unit }) => {
   };
 
   return (
-    <form>
-      <input readOnly value={convertedQty} />
-      <select value={convertedUnit} onChange={handleChange}>
-        {(currUnit !== ml || currUnit !== l) && (
-          <option value="g">Grams</option>
-        )}
-        {(!currUnit !== ml || currQty !== l) && (
-          <option value="kg">Kilograms</option>
-        )}
-        {(!currUnit !== ml || currQty !== l) && (
-          <option value="lbs">Pounds</option>
-        )}
-        {(!currUnit !== ml || currQty !== l) && (
-          <option value="oz">Ounce</option>
-        )}
-        {(currUnit === "l" || currUnit === "oz" || currUnit === "ml") && (
-          <option value="ml">Mililitres</option>
-        )}
-        {(currUnit === "ml" || currUnit === "oz" || currUnit === "l") && (
-          <option value="l">Litres</option>
-        )}
-      </select>
-    </form>
+    (currUnit === g ||
+      currUnit === kg ||
+      currUnit === lbs ||
+      currUnit === ml ||
+      currUnit === l ||
+      currUnit === oz ||
+      currUnit === fl) && (
+      <form>
+        <p>
+          {convertedQty}
+          <select value={convertedUnit} onChange={handleChange}>
+            {(currUnit === g ||
+              currUnit === oz ||
+              currUnit === lbs ||
+              currUnit === kg) && <option value="g">Grams</option>}
+            {(currUnit === kg ||
+              currUnit === g ||
+              currUnit === oz ||
+              currUnit === lbs) && <option value="kg">Kilograms</option>}
+            {(currUnit === g ||
+              currUnit === oz ||
+              currUnit === lbs ||
+              currUnit === kg) && <option value="lbs">Pounds</option>}
+            {(currUnit === g ||
+              currUnit === oz ||
+              currUnit === lbs ||
+              currUnit === kg ||
+              currUnit === ml ||
+              currUnit === l) && <option value="oz">Ounce</option>}
+            {(currUnit === l || currUnit === oz || currUnit === ml) && (
+              <option value="ml">Mililitres</option>
+            )}
+            {(currUnit === l || currUnit === oz || currUnit === ml) && (
+              <option value="l">Litres</option>
+            )}
+          </select>
+        </p>
+      </form>
+    )
   );
 };
 
@@ -154,6 +172,10 @@ function OztoKG(ounce) {
   return ounce * 0.0283;
 }
 
+function OztoML(ounce) {
+  return ounce * 29.5735;
+}
+
 function MLtoL(mililitres) {
   return mililitres * 0.001;
 }
@@ -162,26 +184,10 @@ function MLtoOz(mililitres) {
   return mililitres * 0.0351951;
 }
 
-function MLtoTBS(mililitres) {
-  return mililitres * 0.067628;
-}
-
 function LtoML(litres) {
   return litres * 1000;
 }
 
 function LtoOz(litres) {
   return litres * 33.814;
-}
-
-function LtoTSP(litres) {
-  return litres * 202.884;
-}
-
-function LtoTBS(litres) {
-  return litres * 56.3121;
-}
-
-function TBStoML(tablespoon) {
-  return tablespoon * 17.7582;
 }

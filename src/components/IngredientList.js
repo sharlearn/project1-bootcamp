@@ -1,31 +1,45 @@
 import { Converter } from "./Converter";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
+import { Button } from "react-bootstrap";
 
 const IngredientList = ({ ingredients, handleDelete, hideConverter }) => {
   return (
-    <Container>
-      {ingredients.map((ingredients) => (
-        <>
-          <Row>
-            <Col>{ingredients.name}</Col>
-            <Col>{ingredients.qty}</Col>
-            <Col>{ingredients.unit}</Col>
-            <Col>
+    <Table responsive="sm" className="ingredient-list">
+      <tbody>
+        {ingredients.map((ingredients) => (
+          <>
+            <tr>
+              <td size="sm" className="ingredient-qty">
+                {ingredients.qty}
+              </td>
+              <td size="sm" className="ingredient-unit">
+                {ingredients.unit}
+              </td>
+              <td size="sm" className="ingredient-name">
+                {ingredients.name}
+              </td>
+
               {handleDelete && (
-                <button onClick={() => handleDelete(ingredients.id)}>X</button>
+                <td>
+                  <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => handleDelete(ingredients.id)}
+                  >
+                    X
+                  </Button>
+                </td>
               )}
-            </Col>
-            <Col>
               {!hideConverter && (
-                <Converter qty={ingredients.qty} unit={ingredients.unit} />
+                <td>
+                  <Converter qty={ingredients.qty} unit={ingredients.unit} />
+                </td>
               )}
-            </Col>
-          </Row>
-        </>
-      ))}
-    </Container>
+            </tr>
+          </>
+        ))}
+      </tbody>
+    </Table>
   );
 };
 
