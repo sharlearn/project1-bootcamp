@@ -17,6 +17,8 @@ function NavigationBar({ setPage, allRecipes }) {
     <Navbar>
       <Navbar.Brand className="title">Eat Your Eggs</Navbar.Brand>
       <Nav className="me-auto">
+        {/* Your setPage function does not have any arguments in the function definition, so passing true is redundant
+        */}
         <Nav.Link onClick={() => setPage(true)}>Add Recipe</Nav.Link>
         <NavDropdown title="Recipes" id="navbarScrollingDropdown">
           {allRecipes.map((recipe) => (

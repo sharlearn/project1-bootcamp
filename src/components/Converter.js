@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 
 export const Converter = ({ qty, unit }) => {
+
   const currQty = qty;
   const currUnit = unit;
+    // Let's move these static variables outside of our component in line 2. That way they don't get redefined on every rerender.
   const kg = "kg";
   const g = "g";
   const lbs = "lbs";
@@ -11,6 +13,8 @@ export const Converter = ({ qty, unit }) => {
   const oz = "oz";
   const fl = "fl";
 
+  // ideally we define our hooks always in the topmost position
+  // since we only use currQty here, we might just do: useState(qty) and don't need to declare these variables on top
   const [convertedQty, setConvertedQty] = useState(currQty);
   const [convertedUnit, setConvertedUnit] = useState(currUnit);
 
@@ -19,6 +23,41 @@ export const Converter = ({ qty, unit }) => {
     setConvertedUnit(selectedUnit);
 
     if (currUnit === g) {
+
+      // a switch statement would be perfect here
+
+      /*
+      
+      switch(selectedUnit) {
+        case kg: return setConvertedQty(GtoKG(currQty));
+        case oz: return setConvertedQty(GtoOz(currQty));
+        default: return setConvertedQty(currQty);
+      }
+      
+      */
+
+      // I do think we can move the logic of each separate if statement in a function as well so it would like
+      /*
+      
+      if (currUnit === g) {
+        convertGramToKg() or something along these lines
+      }
+
+      To make this logic even easier, I would do an object then
+
+      const conversions = {
+        "g": convertGramToKg(),
+        "kg": convertKgToGram(),
+        ...
+      }
+
+      and then use it like:
+
+      conversions[currUnit]
+
+      This way we have one line, abstracted into an object, which calls a specific function depending on which key you access
+      
+      */
       if (selectedUnit === kg) {
         return setConvertedQty(GtoKG(currQty));
       } else if (selectedUnit === oz) {
@@ -80,6 +119,7 @@ export const Converter = ({ qty, unit }) => {
   };
 
   return (
+    // If current unit can be any of all possible units, is it then necessary to conditionally render here?
     (currUnit === g ||
       currUnit === kg ||
       currUnit === lbs ||
@@ -91,6 +131,14 @@ export const Converter = ({ qty, unit }) => {
         <p>
           {convertedQty}
           <select value={convertedUnit} onChange={handleChange}>
+            {/* The first three options, seem to be identical, we could create a variable for this.
+            
+            const isSolidWeight = currUnit === g || currUnit === oz || currUnit === lbs || currUnit === kg
+            const isLiquidWeight = currUnit === ml || currUnit === l
+
+            then do a check for either or both of these variables or something along these lines.
+            
+            */}
             {(currUnit === g ||
               currUnit === oz ||
               currUnit === lbs ||
@@ -122,12 +170,16 @@ export const Converter = ({ qty, unit }) => {
   );
 };
 
+// Don't forget that capital letter for functions is always reserved for classes or components only.
+// Ideally we name our functions as to what they do in plain english. In this case we convert, so let's lead our function name with that word.
 //conversions
+// convertKilogramToGram
 function KGtoG(kilograms) {
   const grams = kilograms * 1000;
   return grams;
 }
 
+// convertGramToKilogram
 function GtoKG(grams) {
   return grams / 1000;
 }
