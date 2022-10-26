@@ -10,6 +10,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const CreateRecipe = ({ setPage, setRecipes, allRecipes, show }) => {
+  // I think the naming here name <-> recipeName is a bit confusing and not clear what name is for as opposed to recipeName
   const [name, setName] = useState("");
   const [recipeName, setRecipeName] = useState("");
 
@@ -43,6 +44,7 @@ const CreateRecipe = ({ setPage, setRecipes, allRecipes, show }) => {
   const ingredientsListUpdate = (event) => {
     setIngredientsList([...ingredientsList, ingredient]);
     setIngredient({ name: "", qty: 0, unit: "" });
+    // Does this work as expected? I would almost assume that this might lead to bugs if we don't position event.preventDefault right at the top
     event.preventDefault();
   };
 
@@ -75,6 +77,7 @@ const CreateRecipe = ({ setPage, setRecipes, allRecipes, show }) => {
     localStorage.setItem("recipes", JSON.stringify(allCurrRecipes));
 
     setRecipes(allCurrRecipes);
+    // setPage does not have any parameters
     setPage(false);
   };
 
@@ -144,6 +147,21 @@ const CreateRecipe = ({ setPage, setRecipes, allRecipes, show }) => {
                 value={ingredient.unit}
                 onChange={ingredientChange}
               >
+                {/* I think we could create a function that renders all these:
+
+                  const options = {
+                    "tsp": teaspoon,
+                    "tbs": tablespoon,
+                    ...
+                  }
+                
+                  const getOptions = () => {
+                    return Object.entries(options).map((option) => <option value={option[0]>{option[1]}</option> })
+                  }
+
+                  Something along these lines. That way our list is easily extendable and we can be a bit more dynamic in our approach with dropdowns. Since the content and values here are static values, we can keep these values stored in an object and then retrieve them via a function. We could store them also in other datatypes, but the concept here is that static information, could possibly be stored by itself and then be used across our app in different ways. For example you want to have headings with all these measurements, then you can access the object again!
+                
+                */}
                 <option value=""> </option>
                 <option value="tsp">teaspoon</option>
                 <option value="tbs">tablespoon</option>

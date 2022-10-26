@@ -7,6 +7,7 @@ const IngredientList = ({ ingredients, handleDelete, hideConverter }) => {
     <Table responsive="sm" className="ingredient-list">
       <tbody>
         {ingredients.map((ingredients) => (
+          // I think we can remove the fragment <> as we have the tr as parent element
           <>
             <tr>
               <td size="sm" className="ingredient-qty">
@@ -30,6 +31,7 @@ const IngredientList = ({ ingredients, handleDelete, hideConverter }) => {
                   </Button>
                 </td>
               )}
+              {/* I would rather reverse the logic here and say showConverter, logically easier to read than negating a negative */}
               {!hideConverter && (
                 <td>
                   <Converter qty={ingredients.qty} unit={ingredients.unit} />
